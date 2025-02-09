@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول أطباء مركز أم النور الطبى</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            text-align: center;
+            padding: 10px;
+        }
+        .today-date {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+        .date-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .date-navigation button {
+            background-color: darkred;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .date-navigation button:hover {
+            background-color: #0056b3;
+        }
+        .date-navigation input[type="date"] {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #007BFF;
+            font-size: 14px;
+        }
+
+        .event-time {
+            font-size: 12px;
+            font-weight: bold;
+            color: #FF0000;
+        }
+        .no-events {
+            font-size: 14px;
+            color: darkslategray;
+        }
+        .filters {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        .filters label {
+            display: block;
+            margin: 5px 0;
+        }
+        .font-size-control {
+            margin: 10px auto;
+            text-align: center;
+        }
+        .font-size-control label {
+            font-size: 14px;
+            color: #007BFF;
+            margin-right: 10px;
+        }
+        .font-size-control input[type="range"] {
+            width: 150px;
+        }
+        .calendar-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .calendar-buttons button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .calendar-buttons button.active {
+            background-color: darkred;
+        }
+        .calendar-headline {
+    font-size: 20px;
+    font-weight: bold;
+    color: white; /* Change text color to white for better contrast */
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 10px 20px; /* Add padding for better spacing */
+    background-color: darkred; /* Use a darker shade for the background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3); /* Add a shadow for a 3D effect */
+    display: inline-block; /* Ensure the headline fits the content */
+    text-align: center; /* Center the text */
+}
+
+
+        .strike {
+      
+            text-decoration: line-through; 
+
+            text-decoration-thickness: 1.5px; 
+
+            text-decoration-color: blue; 
+
+        }
+
+
+label { 
+
+margin: 5px; /* Adds space between label and input */ 
+
+color:grey; 
+
+font-weight: bold; 
+
+} 
+
+
+.calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    direction: rtl;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+    border-radius: 10px; /* Rounded corners */
+    overflow: hidden; /* Ensure rounded corners are visible */
+    background-color: #fff; /* White background for the table */
+}
+
+.calendar-table th, .calendar-table td {
+    border: 1px solid #ddd;
+    padding: 7px; /* Increase padding for better spacing */
+}
+
+.calendar-table th {
+    background-color:#0353a8;
+    color: white;
+    font-weight: bold;
+    font-size: 14px; /* Slightly larger font for headers */
+}
+
+.calendar-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Alternate row color */
+}
+
+.calendar-table tr:hover {
+    background-color: #f1f1f1; /* Hover effect for rows */
+}
+
+.calendar-table td:first-child {
+    text-align: right;
+    direction: rtl;
+    font-weight: bold;
+    background-color: #f5f5f5; /* Light background for the first column */
+}
+
+.event-time {
+    font-size: 14px; /* Slightly larger font for event times */
+    font-weight: bold;
+    color: #FF0000;
+    padding: 2px; /* Add padding for better spacing */
+    background-color: #fff3f3; /* Light background for event times */
+    border-radius: 5px; /* Rounded corners for event times */
+    display: inline-block; /* Ensure event times are inline */
+    margin: 1px; /* Add margin for better spacing */
+}
+
+.no-events {
+    font-size: 14px;
+    color: #888; /* Lighter color for no events */
+    font-style: italic; /* Italicize no events text */
+}
+
+.calendar-headline {
+    font-size: 24px; /* Larger font for headlines */
+    font-weight: bold;
+    color: white;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px 5px; /* Increase padding for better spacing */
+    background-color: darkred;
+    border-radius: 10px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    text-align: center;
+}
+
+
+.selected-dates {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #ddd;
+    text-transform: uppercase;
+}
+
+.date-row {
+    font-size: 16px;
+    font-weight: normal;
+    color: #666;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+#date-range-error {
+    color: red;
+    font-size: 14px;
+    margin: 5px;
+    font-weight: bold;
+    background-color: yellow;
+    display: none; /* Initially hidden */
+}
+
+html {
+    font-size: 16px; /* Base font size */
+}
+
+.today-date {
+    font-size: 1.125rem; /* 18px (16px * 1.125) */
+}
+
+.calendar-headline {
+    font-size: 1.5rem; /* 24px (16px * 1.5) */
+}
+
+.event-time {
+    font-size: 0.875rem; /* 14px (16px * 0.875) */
+}
+
+.calendar-table th {
+    font-size: 1.0rem; /* 14px (16px * 0.875) */
+}
+
+.filters h5 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    direction: rtl;
+}
+
+#clinic-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    direction: rtl;
+    margin-top: 10px;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+}
+
+#clinic-filters label {
+    display: inline-flex; /* Use inline-flex to keep labels side by side */
+    align-items: center;
+    gap: 5px;
+    margin: 0; /* Remove default margin */
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+#clinic-filters.show {
+    max-height: 500px; /* Adjust based on content height */
+    opacity: 1;
+}
+
+#arrow-icon {
+    transition: transform 0.3s ease-out;
+}
+
+#arrow-icon.rotate {
+    transform: rotate(180deg);
+}
+
+#loading-spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #007BFF;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="today-date" id="today-date"></div>
+    <div class="date-navigation">
+        <input type="date" id="end-date-picker">
+        <label class="label-dates" style="font-weight: bold" id="end-date-picker">إلى</label>
+        <input type="date" id="start-date-picker">
+        <label class="label-dates" style="font-weight: bold" for="start-date-picker">من</label>
+    </div>
+    <div id="date-range-error" style="color: red; font-size: 14px; margin: 5px; display: none;"></div>
+    <div class="date-navigation" id="calendar-buttons">
+        <button style="width:15%;background-color: darkgreen;" id="hide-all">اخفاء</button>
+        <button style="width:15%" id="next-day">القادم</button>
+        <button style="width:15%; background-color: darkblue;" id="today-button">اليوم</button> <!-- New Button -->
+        <button style="width:15%" id="prev-day">السابق</button>
+        <button style="width:15%;background-color: darkgreen;" id="show-all">اظهار</button>
+    </div>
+    <div id="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+    <div class="filters">
+        <h5 onclick="toggleFilters()" style="cursor: pointer;">
+            العيادات المتاحة <span id="arrow-icon">▼</span>
+        </h5>
+        <div id="clinic-filters" style="display: none;"></div>
+    </div>
+    <div id="days-container"></div>
+    <div class="font-size-control">
+        <label for="font-size">حجم الخط:</label>
+        <input type="range" id="font-size" min="50" max="200" value="100" step="10">
+        <span id="font-size-percentage">100%</span>
+    </div>
+    <script>
+             const apiKey = 'AIzaSyDSTQcrDq1LklLe0Do7hSjFm2TogVrfRxE';
+        const calendarIds = [
+            'h8go7kfqvv7bu8dm2g5he87ppk@group.calendar.google.com', 
+'26kafb4ock4v1mf167928hf7ts@group.calendar.google.com', 
+'obnmdmn8cfuunl7u4muaq3rjcs@group.calendar.google.com', 
+'07168e8cfd9c5abea2a0cae62fea43ab8e1e150f84ae679e57cd8f4bcd3d1e17@group.calendar.google.com', 'uso1kuodjvanh8hg3ij74fv058@group.calendar.google.com', 
+'fqck7077phe60ar9e0ts3kvffs@group.calendar.google.com', 'aa69550f84c315d3d6ed79d9120f378718b4f7f7ce434b1113fda5591e214915@group.calendar.google.com', 'bab7vikg9prhm3vigd2ll0pup8@group.calendar.google.com', '852j5orksvcu61midgh6slsqo8@group.calendar.google.com', 'f3k381rs147vov3lhmb1k75nr0@group.calendar.google.com', 'fkmdjl11k97oef7i6s6j2touqs@group.calendar.google.com', '71ff33d7184d00a19b566897c2b431778f927d20c7f1656d3dbbf7c3607f7093@group.calendar.google.com', '05ibl09sinh4gut8lg8u84476o@group.calendar.google.com', '83c5fab1f3a9fca0c0120f4034deac45f9a0ee9c4344b9250475fa106f494365@group.calendar.google.com', 'abp127it7nmjmuhniq0qhj58bc@group.calendar.google.com', '4fagdtcnk3ol8ahussr8lack8k@group.calendar.google.com'
+        ];
+
+        // قائمة ثابتة بأسماء التقويمات وألوانها
+        const calendarNames = {
+            'h8go7kfqvv7bu8dm2g5he87ppk@group.calendar.google.com': { name: 'عيادات ✩ أسنان 🦷', color: '#FFEBEE' },
+  '26kafb4ock4v1mf167928hf7ts@group.calendar.google.com': { name: 'عيادات ✩ علاج طبيعي 🦵', color: '#E8EAF6' },
+    'obnmdmn8cfuunl7u4muaq3rjcs@group.calendar.google.com': { name: 'عيادات ✩ باطن وقلب 🩺', color: '#FBE9E7' },
+'07168e8cfd9c5abea2a0cae62fea43ab8e1e150f84ae679e57cd8f4bcd3d1e17@group.calendar.google.com': { name: 'عيادات ✩ تغذية 🍏', color: '#E0F7FA' },
+            'uso1kuodjvanh8hg3ij74fv058@group.calendar.google.com': { name: 'عيادات ✩ أطفال 👶', color: '#FFF3E0' },
+            'fqck7077phe60ar9e0ts3kvffs@group.calendar.google.com': { name: 'عيادات ✩ أنف وأذن وحنجرة 👂', color: '#E3F2FD' },
+            'aa69550f84c315d3d6ed79d9120f378718b4f7f7ce434b1113fda5591e214915@group.calendar.google.com': { name: 'عيادات ✩ الجهاز الهضمى والكبد 🩺', color: '#E8F5E9' },
+        
+            'bab7vikg9prhm3vigd2ll0pup8@group.calendar.google.com': { name: 'عيادات ✩ تخاطب 🔊', color: '#EDE7F6' },
+            
+            '852j5orksvcu61midgh6slsqo8@group.calendar.google.com': { name: 'عيادات ✩ جراحة عامة 🔪', color: '#FFFDE7' },
+            'f3k381rs147vov3lhmb1k75nr0@group.calendar.google.com': { name: 'عيادات ✩ جلدية 💅', color: '#F1F8E9' },
+            'fkmdjl11k97oef7i6s6j2touqs@group.calendar.google.com': { name: 'عيادات ✩ رمد 👁️', color: '#E0F2F1' },
+            '71ff33d7184d00a19b566897c2b431778f927d20c7f1656d3dbbf7c3607f7093@group.calendar.google.com': { name: 'عيادات ✩ سونار 📺', color: '#FFF3E0' },
+            '05ibl09sinh4gut8lg8u84476o@group.calendar.google.com': { name: 'عيادات ✩ عظام 🦴', color: '#F3E5F5' },
+          
+            '83c5fab1f3a9fca0c0120f4034deac45f9a0ee9c4344b9250475fa106f494365@group.calendar.google.com': { name: 'عيادات ✩ مخ واعصاب 🧠', color: '#E1F5FE' },
+            'abp127it7nmjmuhniq0qhj58bc@group.calendar.google.com': { name: 'عيادات ✩ مسالك ⚕️', color: '#FCE4EC' },
+            '4fagdtcnk3ol8ahussr8lack8k@group.calendar.google.com': { name: 'عيادات ✩ نساء وتوليد 🤰', color: '#E8F5E9' }
+        };
+
+        let startDate, endDate;
+
+        // Initialize date pickers
+        function initializeDatePickers() {
+            document.getElementById('start-date-picker').value = '';
+            document.getElementById('end-date-picker').value = '';
+        }
+
+        // Main function to initialize the page
+        async function main() {
+            if (!startDate || !endDate) return;
+            const validatedDates = validateDateRange(startDate, endDate);
+            startDate = validatedDates.startDate;
+            endDate = validatedDates.endDate;
+            updateDatePickers(startDate, endDate);
+            displaySelectedDateRange(startDate, endDate);
+            await displayEvents(startDate, endDate);
+        }
+        // Initialize the page
+initializeDatePickers();
+createClinicFilters();
+
+
+        // Fetch events from Google Calendar
+        async function fetchEventsFromCalendar(calendarId, startDate, endDate) {
+            const startOfDay = new Date(startDate.setHours(0, 0, 0, 0)).toISOString();
+            const endOfDay = new Date(endDate.setHours(23, 59, 59, 999)).toISOString();
+            const url = `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?key=${apiKey}&timeMin=${startOfDay}&timeMax=${endOfDay}&orderBy=startTime&singleEvents=true`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                return data.items ? data.items.map(event => ({ ...event, calendarId })) : [];
+            } catch (error) {
+                console.error(`Error fetching events from ${calendarId}:`, error);
+                return [];
+            }
+        }
+
+        // Fetch all events from all calendars
+        async function fetchAllEvents(startDate, endDate) {
+    showSpinner(); // Show spinner when fetching starts
+    let allEvents = [];
+    for (const calendarId of calendarIds) {
+        const events = await fetchEventsFromCalendar(calendarId, new Date(startDate), new Date(endDate));
+        allEvents = allEvents.concat(events);
+    }
+    hideSpinner(); // Hide spinner after fetching completes
+    return allEvents;
+}
+
+async function displayEvents(startDate, endDate) {
+    showSpinner(); // Show spinner when displaying starts
+    const daysContainer = document.getElementById('days-container');
+    daysContainer.innerHTML = '';
+    const events = await fetchAllEvents(startDate, endDate);
+    const groupedEvents = {};
+
+    events.forEach(event => {
+        const calendarName = calendarNames[event.calendarId]?.name || event.calendarId;
+        if (!groupedEvents[calendarName]) groupedEvents[calendarName] = [];
+        groupedEvents[calendarName].push(event);
+    });
+
+    for (const [calendarName, events] of Object.entries(groupedEvents)) {
+        const calendarHeadline = document.createElement('div');
+        calendarHeadline.className = 'calendar-headline';
+        calendarHeadline.textContent = calendarName;
+        daysContainer.appendChild(calendarHeadline);
+
+        const table = document.createElement('table');
+        table.className = 'calendar-table';
+        table.innerHTML = `
+            <thead>
+                <tr class="selected-dates" id="selected-dates">
+                    <th>التاريخ</th>
+                    ${generateDateRow(startDate, endDate)}
+                </tr>
+                <tr class="date-row" id="selected-days">
+                    <th>الطبيب</th>
+                    ${generateDayHeaders(startDate, endDate)}
+                </tr>
+            </thead>
+            <tbody></tbody>
+        `;
+
+        const tableBody = table.querySelector('tbody');
+        const eventsByTitle = {};
+
+        events.forEach(event => {
+            const eventTitle = event.summary || "بدون عنوان";
+            if (!eventsByTitle[eventTitle]) eventsByTitle[eventTitle] = [];
+            eventsByTitle[eventTitle].push(event);
+        });
+
+        for (const [eventTitle, events] of Object.entries(eventsByTitle)) {
+            const row = document.createElement('tr');
+            const titleCell = document.createElement('td');
+            titleCell.textContent = eventTitle;
+            row.appendChild(titleCell);
+
+            const currentDate = new Date(startDate);
+            while (currentDate <= endDate) {
+                const dayCell = document.createElement('td');
+                const dayEvents = events.filter(event => {
+                    const eventDate = new Date(event.start.dateTime || event.start.date);
+                    return eventDate.toDateString() === currentDate.toDateString();
+                });
+
+                if (dayEvents.length > 0) {
+                    dayEvents.forEach(event => {
+                        const eventTime = document.createElement('div');
+                        eventTime.className = 'event-time';
+                        const startTime = new Date(event.start.dateTime || event.start.date);
+                        const endTime = new Date(event.end.dateTime || event.end.date);
+                        const formattedStartTime = formatTime(startTime);
+                        const formattedEndTime = formatTime(endTime);
+                        eventTime.innerHTML = eventTitle.includes('❌') ?
+                            `<span class="strike" style="color: #DC143C;">${formattedStartTime} - ${formattedEndTime}</span>` :
+                            `<span style="color: #DC143C;">${formattedStartTime} - ${formattedEndTime}</span>`;
+                        dayCell.appendChild(eventTime);
+                    });
+                } else {
+                    dayCell.textContent = '-';
+                }
+                row.appendChild(dayCell);
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            tableBody.appendChild(row);
+        }
+        daysContainer.appendChild(table);
+    }
+    setTimeout(hideSpinner, 5000); // Hide spinner after 5 seconds
+}
+
+function showSpinner() {
+    document.getElementById('loading-spinner').style.display = 'block';
+}
+
+function hideSpinner() {
+    document.getElementById('loading-spinner').style.display = 'none';
+}
+
+        // Helper functions
+        function generateDayHeaders(startDate, endDate) {
+            const daysOfWeek = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+            let headers = '';
+            const currentDate = new Date(startDate);
+            while (currentDate <= endDate) {
+                const dayIndex = currentDate.getDay();
+                headers += `<th class="date-row">${daysOfWeek[dayIndex]}</th>`;
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return headers;
+        }
+
+        function generateDateRow(startDate, endDate) {
+            let dateRow = '';
+            const currentDate = new Date(startDate);
+            while (currentDate <= endDate) {
+                const formattedDate = currentDate.toLocaleDateString('ar-EG', { day: 'numeric', month: 'numeric', year: 'numeric' });
+                dateRow += `<th class="selected-dates">${formattedDate}</th>`;
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return dateRow;
+        }
+
+        function displaySelectedDateRange(startDate, endDate) {
+            const todayDateElement = document.getElementById('today-date');
+            const startFormattedDate = startDate.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).replace(/،/g, ' : ');
+            const endFormattedDate = endDate.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).replace(/،/g, ' : ');
+            todayDateElement.innerHTML = `<span style="color: black;">الفترة المحددة:</span> من ${startFormattedDate} إلى ${endFormattedDate}`;
+        }
+
+        function updateDatePickers(startDate, endDate) {
+            document.getElementById('start-date-picker').value = startDate.toISOString().split('T')[0];
+            document.getElementById('end-date-picker').value = endDate.toISOString().split('T')[0];
+        }
+
+        function validateDateRange(startDate, endDate) {
+            const maxDuration = 7;
+            const durationInDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+            const errorMessageElement = document.getElementById('date-range-error');
+
+            if (durationInDays > maxDuration) {
+                errorMessageElement.textContent = 'الرجاء تحديد مدة لا تزيد عن 7 أيام.';
+                errorMessageElement.style.display = 'block';
+                endDate = new Date(startDate);
+                endDate.setDate(startDate.getDate() + maxDuration - 1);
+            } else {
+                errorMessageElement.style.display = 'none';
+            }
+            return { startDate, endDate };
+        }
+
+        function formatTime(date) {
+            let hours = date.getHours();
+            let minutes = date.getMinutes();
+            let ampm = hours >= 12 ? 'م' : 'ص';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            let formattedTime = `${hours}`;
+            if (minutes > 0) formattedTime += `:${minutes.toString().padStart(2, '0')}`;
+            formattedTime += ` ${ampm}`;
+            return formattedTime;
+        }
+
+        // Event listeners
+        document.getElementById('prev-day').addEventListener('click', () => {
+            startDate.setDate(startDate.getDate() - 1);
+            endDate.setDate(endDate.getDate() - 1);
+            main();
+        });
+
+        document.getElementById('next-day').addEventListener('click', () => {
+            startDate.setDate(startDate.getDate() + 1);
+            endDate.setDate(endDate.getDate() + 1);
+            main();
+        });
+
+        document.getElementById('start-date-picker').addEventListener('change', (event) => {
+            const newStartDate = new Date(event.target.value);
+            const newEndDate = endDate ? new Date(endDate) : null;
+            if (newEndDate && newStartDate > newEndDate) {
+                newEndDate.setDate(newStartDate.getDate());
+                document.getElementById('end-date-picker').value = newEndDate.toISOString().split('T')[0];
+            }
+            startDate = newStartDate;
+            endDate = newEndDate;
+            main();
+        });
+
+        document.getElementById('end-date-picker').addEventListener('change', (event) => {
+            const newEndDate = new Date(event.target.value);
+            const newStartDate = new Date(startDate);
+            if (newEndDate < newStartDate) {
+                newStartDate.setDate(newEndDate.getDate());
+                document.getElementById('start-date-picker').value = newStartDate.toISOString().split('T')[0];
+            }
+            startDate = newStartDate;
+            endDate = newEndDate;
+            main();
+        });
+
+        document.getElementById('show-all').addEventListener('click', () => {
+            document.querySelectorAll('#clinic-filters input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = true;
+                toggleCalendarVisibility(checkbox.value, true);
+            });
+        });
+
+        document.getElementById('hide-all').addEventListener('click', () => {
+    document.querySelectorAll('#clinic-filters input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+        toggleCalendarVisibility(checkbox.value, false); // Ensure visibility is updated
+    });
+});
+
+        document.getElementById('font-size').addEventListener('input', (event) => {
+            const percentage = event.target.value;
+            document.getElementById('font-size-percentage').textContent = `${percentage} %`;
+            document.documentElement.style.fontSize = `${(16 * percentage) / 100}px`;
+        });
+
+        // Initialize the page
+        initializeDatePickers();
+        main();
+
+        function createClinicFilters() {
+            const filtersContainer = document.getElementById('clinic-filters');
+            calendarIds.forEach(calendarId => {
+                const calendarName = calendarNames[calendarId]?.name || calendarId;
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = calendarName;
+                checkbox.checked = true; // Enable all clinics by default
+                checkbox.addEventListener('change', () => {
+                    toggleCalendarVisibility(calendarName, checkbox.checked);
+                });
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode(calendarName));
+                filtersContainer.appendChild(label);
+            });
+        }
+
+        // Event listener for the "Today's Clinic" button
+document.getElementById('today-button').addEventListener('click', () => {
+    const today = new Date();
+    startDate = new Date(today);
+    endDate = new Date(today);
+    updateDatePickers(startDate, endDate);
+    main();
+});
+
+function toggleFilters() {
+    const filtersDiv = document.getElementById('clinic-filters');
+    const arrowIcon = document.getElementById('arrow-icon');
+
+    if (filtersDiv.style.display === 'none') {
+        filtersDiv.style.display = 'block';
+        filtersDiv.classList.add('show');
+        arrowIcon.classList.add('rotate');
+    } else {
+        filtersDiv.classList.remove('show');
+        arrowIcon.classList.remove('rotate');
+        setTimeout(() => {
+            filtersDiv.style.display = 'none';
+        }, 300); // Match the transition duration
+    }
+}
+
+function toggleCalendarVisibility(calendarName, isVisible) {
+    const calendarHeadlines = document.querySelectorAll('.calendar-headline');
+    calendarHeadlines.forEach(headline => {
+        if (headline.textContent === calendarName) {
+            headline.style.display = isVisible ? 'block' : 'none';
+            const table = headline.nextElementSibling;
+            if (table && table.classList.contains('calendar-table')) {
+                table.style.display = isVisible ? 'table' : 'none';
+            }
+        }
+    });
+}
+    </script>
+</body>
+</html>
