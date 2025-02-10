@@ -388,12 +388,19 @@ html {
     gap: 5px;
     font-size: 14px;
 }
-#print-button{
-    background-color: black;color:white; font-weight:bold;
-    padding:5px;
-    border-radius: 10px;
-    display: none;
+.print-button-container {
+    text-align: center; /* Center the button horizontally */
+    margin: 10px 0; /* Add some margin for spacing */
+}
 
+#print-button {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    padding: 5px 20px; /* Add padding for better appearance */
+    border-radius: 10px;
+    display: none; /* Ensure the button is inline-block for centering */
+    margin: 0 auto; /* Center the button */
 }
 
 <style>
@@ -435,9 +442,10 @@ html {
         <button style="width:15%; background-color: darkblue;" id="today-button">اليوم</button> <!-- New Button -->
         <button style="width:15%" id="prev-day">السابق</button>
         <button style="width:15%;background-color: darkgreen;" id="show-all">اظهار</button>
+
     </div>
-    <div style="text-align: center;">
-        <button id="print-button">🖨️ طباعة الجدول</button> <!-- New Print Button -->
+    <div class="print-button-container">
+        <button id="print-button">🖨️ طباعة الجدول</button>
     </div>
     <div id="loading-spinner" style="display: none;">
         <div class="spinner"></div>
@@ -939,8 +947,15 @@ function updatePrintButtonVisibility() {
     const printButton = document.getElementById('print-button');
     const calendarHeadlines = document.querySelectorAll('.calendar-headline');
     const anyVisible = Array.from(calendarHeadlines).some(headline => headline.style.display !== 'none');
-    printButton.style.display = anyVisible ? 'block' : 'none'; // Show or hide the print button
+    
+    if (anyVisible) {
+        printButton.style.display = 'inline-block'; // Show the print button
+        printButton.style.textAlign = 'center'; // Center-align the text inside the button
+    } else {
+        printButton.style.display = 'none'; // Hide the print button
+    }
 }
+
     </script>
 </body>
 </html>
