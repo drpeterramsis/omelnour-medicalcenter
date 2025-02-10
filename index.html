@@ -91,19 +91,7 @@
         .calendar-buttons button.active {
             background-color: darkred;
         }
-        .calendar-headline {
-    font-size: 20px;
-    font-weight: bold;
-    color: white; /* Change text color to white for better contrast */
-    margin-top: 20px;
-    margin-bottom: 10px;
-    padding: 10px 20px; /* Add padding for better spacing */
-    background-color: darkred; /* Use a darker shade for the background */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3); /* Add a shadow for a 3D effect */
-    display: inline-block; /* Ensure the headline fits the content */
-    text-align: center; /* Center the text */
-}
+
 
 
         .strike {
@@ -138,7 +126,9 @@ font-weight: bold;
     border-radius: 10px; /* Rounded corners */
     overflow: hidden; /* Ensure rounded corners are visible */
     background-color: #fff; /* White background for the table */
+    outline: 2px solid #0353a8; /* Add an outline to the whole table */
 }
+
 
 .calendar-table th, .calendar-table td {
     border: 1px solid #ddd;
@@ -185,17 +175,48 @@ font-weight: bold;
 }
 
 .calendar-headline {
-    font-size: 24px; /* Larger font for headlines */
+    font-size: 15px;
     font-weight: bold;
-    color: white;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 5px 5px; /* Increase padding for better spacing */
-    background-color: darkred;
+    color: #FF0000; /* Change text color to white for better contrast */
+    margin: 5px;
+    padding: 5px; /* Add padding for better spacing */
+    background: linear-gradient(180deg, #f9e5e8, #fffcfc); /* Use a darker shade for the background */
+    border: 2px solid darkred; /* Define border width, style, and color */
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3); /* Add a shadow for a 3D effect */
+    display: inline-block; /* Ensure the headline fits the content */
+    text-align: center; /* Center the text */
+}
+
+.calendar-headline {
+    font-size: 1.5rem; /* 24px (16px * 1.5) */
+}
+
+
+/* Style for the sliders and labels */
+#headline-settings {
+    padding: 15px;
+    background-color: #f9f9f9;
     border-radius: 10px;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
-    display: inline-block;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#headline-settings label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 14px;
     text-align: center;
+}
+
+#headline-settings input[type="range"] {
+    width: 100%;
+    margin: 10px 0;
+}
+
+#headline-settings span {
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 14px;
 }
 
 
@@ -233,9 +254,7 @@ html {
     font-size: 1.125rem; /* 18px (16px * 1.125) */
 }
 
-.calendar-headline {
-    font-size: 1.5rem; /* 24px (16px * 1.5) */
-}
+
 
 .event-time {
     font-size: 0.875rem; /* 14px (16px * 0.875) */
@@ -256,22 +275,41 @@ html {
 #clinic-filters {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 20px; /* More space between elements for better layout */
     direction: rtl;
-    margin-top: 10px;
+    margin-top: 20px; /* Increased top margin for better separation */
     transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
     max-height: 0;
     overflow: hidden;
     opacity: 0;
+    justify-content: right; /* Center the items horizontally */
+    text-align: right; /* Center text within the container */
 }
 
 #clinic-filters label {
-    display: inline-flex; /* Use inline-flex to keep labels side by side */
-    align-items: center;
-    gap: 5px;
-    margin: 0; /* Remove default margin */
-    white-space: nowrap; /* Prevent text from wrapping */
+    display: inline-flex;
+    align-items: right;
+    gap: 10px; /* Increase space between checkbox and label for a cleaner look */
+    margin: 0;
+    white-space: nowrap; /* Prevent wrapping of label text */
+    justify-content: center;
+    font-size: 14px; /* Consistent font size */
+    padding: 5px 10px; /* Add some padding for a more spacious look */
+    border-radius: 8px; /* Rounded corners for a softer look */
+    background-color: #f5f5f5; /* Light background for contrast */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: background-color 0.2s ease, transform 0.2s ease; /* Smooth hover effect */
 }
+
+#clinic-filters label:hover {
+    background-color: #e0e0e0; /* Slight background change on hover */
+    transform: scale(1.05); /* Slight scaling for interactive feel */
+}
+
+#clinic-filters input[type="checkbox"] {
+    transform: scale(1.2); /* Slightly larger checkboxes for better visibility */
+}
+
 
 #clinic-filters.show {
     max-height: 500px; /* Adjust based on content height */
@@ -281,8 +319,14 @@ html {
 #arrow-icon {
     transition: transform 0.3s ease-out;
 }
+#arrow-icon_s {
+    transition: transform 0.3s ease-out;
+}
 
 #arrow-icon.rotate {
+    transform: rotate(180deg);
+}
+#arrow-icon_s.rotate {
     transform: rotate(180deg);
 }
 
@@ -308,9 +352,75 @@ html {
         transform: rotate(360deg);
     }
 }
+.day-date {
+    display: none; /* Hide date text by default */
+}
+
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between items */
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 100%; /* Prevents it from becoming too wide */
+    text-align: center; /* Center-align text within the container */
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center; /* Center-align the label and input horizontally */
+}
+
+.setting-group {
+    display: flex;
+    gap: 15px; /* Space between checkboxes */
+    flex-wrap: wrap; /* Allows wrapping if the space is too tight */
+    justify-content: center; /* Center-align checkboxes horizontally */
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+#print-button{
+    background-color: black;color:white; font-weight:bold;
+    padding:5px;
+    border-radius: 10px;
+    display: none;
+
+}
+
+<style>
+    @media print {
+        body {
+            direction: rtl; /* Set direction to right-to-left for printing */
+        }
+        #print-button {
+            display: none; /* Hide the print button when printing */
+        }
+    }
+</style>
+
     </style>
 </head>
 <body>
+
+    <style>
+        @media print {
+            body {
+                direction: rtl; /* Set direction to right-to-left for printing */
+            }
+          /* #print-button {
+                display: none; /* Hide the print button when printing */
+           /* } */
+        }
+    </style>
     <div class="today-date" id="today-date"></div>
     <div class="date-navigation">
         <input type="date" id="end-date-picker">
@@ -326,6 +436,9 @@ html {
         <button style="width:15%" id="prev-day">السابق</button>
         <button style="width:15%;background-color: darkgreen;" id="show-all">اظهار</button>
     </div>
+    <div style="text-align: center;">
+        <button id="print-button">🖨️ طباعة الجدول</button> <!-- New Print Button -->
+    </div>
     <div id="loading-spinner" style="display: none;">
         <div class="spinner"></div>
     </div>
@@ -335,12 +448,43 @@ html {
         </h5>
         <div id="clinic-filters" style="display: none;"></div>
     </div>
-    <div id="days-container"></div>
-    <div class="font-size-control">
-        <label for="font-size">حجم الخط:</label>
-        <input type="range" id="font-size" min="50" max="200" value="100" step="10">
-        <span id="font-size-percentage">100%</span>
+    <div class="filters">
+        <h5 onclick="toggleSettings()" style="cursor: pointer;">
+            إعدادات الصفحة <span id="arrow-icon_s">▼</span>
+        </h5>
+        <div id="Settings" class="settings-container" style="display: none;">
+            <div class="setting-item">
+                <label for="font-size">حجم الخط:</label>
+                <input type="range" id="font-size" min="50" max="200" value="100" step="10">
+                <span id="font-size-percentage">100%</span>
+            </div>
+            <div class="setting-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="toggleSelectedDates" checked> تواريخ جدول العيادات
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="toggleSelectedDays" checked> أيام جدول العيادات
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="toggleDayDates"> التاريخ + اليوم
+                </label>
+            </div>
+            <div id="headline-settings" class="font-size-control" style="display: block;">
+                <!-- Font Size Slider -->
+<label for="font-size-slider">حجم خط العنوان:</label>
+<input type="range" id="font-size-slider" min="5" max="300" value="100" step="5">
+<span id="font-size-value">100%</span>
+
+<!-- Width Slider -->
+<label for="width-slider">عرض العنوان:</label>
+<input type="range" id="width-slider" min="10" max="100" value="100" step="1">
+<span id="width-value">50%</span>
+            </div>
+        </div>
     </div>
+    
+    <div id="days-container"></div>
+   
     <script>
              const apiKey = 'AIzaSyDSTQcrDq1LklLe0Do7hSjFm2TogVrfRxE';
         const calendarIds = [
@@ -421,6 +565,7 @@ createClinicFilters();
         allEvents = allEvents.concat(events);
     }
     hideSpinner(); // Hide spinner after fetching completes
+    updatePrintButtonVisibility(); // Update print button visibility
     return allEvents;
 }
 
@@ -506,6 +651,7 @@ async function displayEvents(startDate, endDate) {
         daysContainer.appendChild(table);
     }
     setTimeout(hideSpinner, 5000); // Hide spinner after 5 seconds
+    updatePrintButtonVisibility();
 }
 
 function showSpinner() {
@@ -518,16 +664,25 @@ function hideSpinner() {
 
         // Helper functions
         function generateDayHeaders(startDate, endDate) {
-            const daysOfWeek = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-            let headers = '';
-            const currentDate = new Date(startDate);
-            while (currentDate <= endDate) {
-                const dayIndex = currentDate.getDay();
-                headers += `<th class="date-row">${daysOfWeek[dayIndex]}</th>`;
-                currentDate.setDate(currentDate.getDate() + 1);
-            }
-            return headers;
-        }
+    const daysOfWeek = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    let headers = '';
+    const currentDate = new Date(startDate);
+
+    while (currentDate <= endDate) {
+        const dayIndex = currentDate.getDay();
+        const formattedDate = currentDate.toLocaleDateString('ar-EG', { day: 'numeric', month: 'numeric', year: 'numeric' });
+
+        headers += `<th class="date-row">
+                        <span class="day-name">${daysOfWeek[dayIndex]}</span>
+                        <span class="day-date"> 📅 ${formattedDate}</span>
+                    </th>`;
+
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return headers;
+}
+
 
         function generateDateRow(startDate, endDate) {
             let dateRow = '';
@@ -631,11 +786,16 @@ function hideSpinner() {
     });
 });
 
-        document.getElementById('font-size').addEventListener('input', (event) => {
-            const percentage = event.target.value;
-            document.getElementById('font-size-percentage').textContent = `${percentage} %`;
-            document.documentElement.style.fontSize = `${(16 * percentage) / 100}px`;
-        });
+document.getElementById('font-size').addEventListener('input', (event) => {
+    const percentage = event.target.value;
+    document.getElementById('font-size-percentage').textContent = `${percentage} %`;
+    const newFontSize = `${(16 * percentage) / 100}px`; // Calculate new font size
+    document.documentElement.style.fontSize = newFontSize; // Set base font size
+    // Apply font size to all calendar table cells
+    document.querySelectorAll('.calendar-table th, .calendar-table td').forEach(cell => {
+        cell.style.fontSize = newFontSize; // Set font size for each cell
+    });
+});
 
         // Initialize the page
         initializeDatePickers();
@@ -685,6 +845,23 @@ function toggleFilters() {
     }
 }
 
+function toggleSettings() {
+    const SettingsDiv = document.getElementById('Settings');
+    const arrow = document.getElementById('arrow-icon_s');
+
+    if (SettingsDiv.style.display === 'none') {
+        SettingsDiv.style.display = 'block';
+        SettingsDiv.classList.add('show');
+        arrow.classList.add('rotate');
+    } else {
+        SettingsDiv.classList.remove('show');
+        arrow.classList.remove('rotate');
+        setTimeout(() => {
+            SettingsDiv.style.display = 'none';
+        }, 300); // Match the transition duration
+    }
+}
+
 function toggleCalendarVisibility(calendarName, isVisible) {
     const calendarHeadlines = document.querySelectorAll('.calendar-headline');
     calendarHeadlines.forEach(headline => {
@@ -703,6 +880,67 @@ document.addEventListener('keydown', event => {
         event.preventDefault();
     }
 });
+
+// Event listeners for checkboxes
+document.getElementById('toggleSelectedDates').addEventListener('change', function () {
+    document.querySelectorAll('.selected-dates').forEach(row => {
+        row.style.visibility = this.checked ? 'visible' : 'collapse';
+    });
+});
+
+document.getElementById('toggleSelectedDays').addEventListener('change', function () {
+    document.querySelectorAll('.date-row').forEach(row => {
+        row.style.visibility = this.checked ? 'visible' : 'collapse';
+    });
+});
+
+document.getElementById('toggleDayDates').addEventListener('change', function () {
+    document.querySelectorAll('.day-date').forEach(dateElement => {
+        dateElement.style.display = this.checked ? 'inline' : 'none';
+    });
+});
+
+// Get references to the sliders and values
+const fontSizeSlider = document.getElementById('font-size-slider');
+const fontSizeValue = document.getElementById('font-size-value');
+const widthSlider = document.getElementById('width-slider');
+const widthValue = document.getElementById('width-value');
+
+// Update font size dynamically
+fontSizeSlider.addEventListener('input', function() {
+    const fontSize = fontSizeSlider.value + "%";
+    fontSizeValue.textContent = fontSize;
+    document.querySelectorAll('.calendar-headline').forEach(headline => {
+        headline.style.fontSize = fontSize;
+    });
+});
+
+// Update width dynamically
+widthSlider.addEventListener('input', function() {
+    const width = widthSlider.value + "%";
+    widthValue.textContent = width;
+    document.querySelectorAll('.calendar-headline').forEach(headline => {
+        headline.style.width = width;
+    });
+});
+document.getElementById('print-button').addEventListener('click', function() {
+    const printContent = document.getElementById('days-container').innerHTML; // Get the calendar content
+    const printWindow = window.open('', '', 'height=600,width=800'); // Open a new window
+    printWindow.document.write('<html><head><title>Print Calendar</title>'); // Write the HTML for the new window
+    printWindow.document.write('<style>body { font-family: Arial, sans-serif; text-align: center; } .calendar-table { width: 100%; border-collapse: collapse; } .calendar-table th, .calendar-table td { border: 1px solid #ddd; padding: 7px; } .calendar-table th { background-color: #0353a8; color: white; }</style>'); // Add styles
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(printContent); // Write the calendar content
+    printWindow.document.write('</body></html>');
+    printWindow.document.close(); // Close the document
+    printWindow.print(); // Trigger the print dialog
+});
+
+function updatePrintButtonVisibility() {
+    const printButton = document.getElementById('print-button');
+    const calendarHeadlines = document.querySelectorAll('.calendar-headline');
+    const anyVisible = Array.from(calendarHeadlines).some(headline => headline.style.display !== 'none');
+    printButton.style.display = anyVisible ? 'block' : 'none'; // Show or hide the print button
+}
     </script>
 </body>
 </html>
