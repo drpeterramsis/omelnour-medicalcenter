@@ -402,11 +402,10 @@ html {
     display: none; /* Ensure the button is inline-block for centering */
     margin: 0 auto; /* Center the button */
 }
-
-<style>
-    @media print {
+@media print {
         body {
             direction: rtl; /* Set direction to right-to-left for printing */
+            text-align: right; /* Align text to the right for Arabic content */
         }
         #print-button {
             display: none; /* Hide the print button when printing */
@@ -417,17 +416,6 @@ html {
     </style>
 </head>
 <body>
-
-    <style>
-        @media print {
-            body {
-                direction: rtl; /* Set direction to right-to-left for printing */
-            }
-          /* #print-button {
-                display: none; /* Hide the print button when printing */
-           /* } */
-        }
-    </style>
     <div class="today-date" id="today-date"></div>
     <div class="date-navigation">
         <input type="date" id="end-date-picker">
@@ -931,17 +919,17 @@ widthSlider.addEventListener('input', function() {
         headline.style.width = width;
     });
 });
-document.getElementById('print-button').addEventListener('click', function() {
-    const printContent = document.getElementById('days-container').innerHTML; // Get the calendar content
-    const printWindow = window.open('', '', 'height=600,width=800'); // Open a new window
-    printWindow.document.write('<html><head><title>Print Calendar</title>'); // Write the HTML for the new window
-    printWindow.document.write('<style>body { font-family: Arial, sans-serif; text-align: center; } .calendar-table { width: 100%; border-collapse: collapse; } .calendar-table th, .calendar-table td { border: 1px solid #ddd; padding: 7px; } .calendar-table th { background-color: #0353a8; color: white; }</style>'); // Add styles
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(printContent); // Write the calendar content
-    printWindow.document.write('</body></html>');
-    printWindow.document.close(); // Close the document
-    printWindow.print(); // Trigger the print dialog
-});
+  document.getElementById('print-button').addEventListener('click', function() {
+            const printContent = document.getElementById('days-container').innerHTML; // Get the calendar content
+            const printWindow = window.open('', '', 'height=600,width=800'); // Open a new window
+            printWindow.document.write('<html><head><title>Print Calendar</title>'); // Write the HTML for the new window
+            printWindow.document.write('<style>body { font-family: Arial, sans-serif; text-align: right; direction: rtl; } .calendar-table { width: 100%; border-collapse: collapse; } .calendar-table th, .calendar-table td { border: 1px solid #ddd; padding: 7px; } .calendar-table th { background-color: #0353a8; color: white; }.calendar-headline { text-align: center; }</style>'); // Add styles
+            printWindow.document.write('</head><body>');
+            printWindow.document.write(printContent); // Write the calendar content
+            printWindow.document.write('</body></html>');
+            printWindow.document.close(); // Close the document
+            printWindow.print(); // Trigger the print dialog
+        });
 
 function updatePrintButtonVisibility() {
     const printButton = document.getElementById('print-button');
