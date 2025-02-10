@@ -279,9 +279,9 @@ html {
     direction: rtl;
     margin-top: 20px; /* Increased top margin for better separation */
     transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-    max-height: 0;
+    max-height: 500 px;
     overflow: hidden;
-    opacity: 0;
+    opacity: 1;
     justify-content: right; /* Center the items horizontally */
     text-align: right; /* Center text within the container */
 }
@@ -293,8 +293,8 @@ html {
     margin: 0;
     white-space: nowrap; /* Prevent wrapping of label text */
     justify-content: center;
-    font-size: 14px; /* Consistent font size */
-    padding: 5px 10px; /* Add some padding for a more spacious look */
+    font-size: 10px; /* Consistent font size */
+    padding: 5px 5px; /* Add some padding for a more spacious look */
     border-radius: 8px; /* Rounded corners for a softer look */
     background-color: #f5f5f5; /* Light background for contrast */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
@@ -307,13 +307,13 @@ html {
 }
 
 #clinic-filters input[type="checkbox"] {
-    transform: scale(1.2); /* Slightly larger checkboxes for better visibility */
+    transform: scale(1.0); /* Slightly larger checkboxes for better visibility */
 }
 
 
-#clinic-filters.show {
-    max-height: 500px; /* Adjust based on content height */
-    opacity: 1;
+#clinic-filters.hide {
+    max-height: 0px; /* Adjust based on content height */
+    opacity: 0;
 }
 
 #arrow-icon {
@@ -425,11 +425,11 @@ html {
     </div>
     <div id="date-range-error" style="color: red; font-size: 14px; margin: 5px; display: none;"></div>
     <div class="date-navigation" id="calendar-buttons">
-        <button style="width:15%;background-color: darkgreen;" id="hide-all">اخفاء</button>
-        <button style="width:15%" id="next-day">القادم</button>
-        <button style="width:15%; background-color: darkblue;" id="today-button">اليوم</button> <!-- New Button -->
-        <button style="width:15%" id="prev-day">السابق</button>
-        <button style="width:15%;background-color: darkgreen;" id="show-all">اظهار</button>
+        <button  id="next-day">◀ القادم</button>
+        <button style=" background-color: darkblue;" id="today-button">اليوم 📅</button> <!-- New Button -->
+        <button  id="prev-day">السابق ▶ </button>
+        <button style=" background-color: orange; border:2px solid brown; border-radius:10px darkred; color:black" id="search-button">بحث 🔍</button> <!-- New Button -->
+
 
     </div>
     <div class="print-button-container">
@@ -440,9 +440,17 @@ html {
     </div>
     <div class="filters">
         <h5 onclick="toggleFilters()" style="cursor: pointer;">
-            العيادات المتاحة <span id="arrow-icon">▼</span>
+            العيادات المتاحة <span id="arrow-icon">▲</span>
         </h5>
-        <div id="clinic-filters" style="display: none;"></div>
+
+        <div id="clinic-filters" style="display: block;">
+            <div class="date-navigation" id="calendar-buttons">
+                <button style="width:15%;background-color: darkgreen;" id="hide-all">اخفاء الكل</button>
+    
+                <button style="width:15%;background-color: darkgreen;" id="show-all">اظهارالكل</button>
+        
+            </div>
+        </div>
     </div>
     <div class="filters">
         <h5 onclick="toggleSettings()" style="cursor: pointer;">
@@ -557,8 +565,11 @@ createClinicFilters();
     showSpinner(); // Show spinner when fetching starts
     let allEvents = [];
     for (const calendarId of calendarIds) {
-        const events = await fetchEventsFromCalendar(calendarId, new Date(startDate), new Date(endDate));
-        allEvents = allEvents.concat(events);
+        const checkbox = document.querySelector(`input[type="checkbox"][value="${calendarNames[calendarId]?.name}"]`);
+        if (checkbox && checkbox.checked) { // Only fetch events if the checkbox is checked
+            const events = await fetchEventsFromCalendar(calendarId, new Date(startDate), new Date(endDate));
+            allEvents = allEvents.concat(events);
+        }
     }
     hideSpinner(); // Hide spinner after fetching completes
     updatePrintButtonVisibility(); // Update print button visibility
@@ -805,7 +816,7 @@ document.getElementById('font-size').addEventListener('input', (event) => {
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.value = calendarName;
-                checkbox.checked = true; // Enable all clinics by default
+                checkbox.checked = false; // Enable all clinics by default
                 checkbox.addEventListener('change', () => {
                     toggleCalendarVisibility(calendarName, checkbox.checked);
                 });
@@ -824,17 +835,22 @@ document.getElementById('today-button').addEventListener('click', () => {
     main();
 });
 
+document.getElementById('search-button').addEventListener('click', () => {
+    main();
+});
+
+
 function toggleFilters() {
     const filtersDiv = document.getElementById('clinic-filters');
     const arrowIcon = document.getElementById('arrow-icon');
 
     if (filtersDiv.style.display === 'none') {
         filtersDiv.style.display = 'block';
-        filtersDiv.classList.add('show');
-        arrowIcon.classList.add('rotate');
-    } else {
-        filtersDiv.classList.remove('show');
+        filtersDiv.classList.remove('hide');
         arrowIcon.classList.remove('rotate');
+    } else {
+        filtersDiv.classList.add('hide');
+        arrowIcon.classList.add('rotate');
         setTimeout(() => {
             filtersDiv.style.display = 'none';
         }, 300); // Match the transition duration
