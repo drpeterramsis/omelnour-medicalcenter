@@ -1315,44 +1315,34 @@ async function displayEvents(startDate, endDate) {
  
 
                 if (dayEvents.length > 0) { 
+    dayEvents.forEach(event => { 
+        const eventTime = document.createElement('div'); 
+        eventTime.className = 'event-time'; 
+        const startTime = new Date(event.start.dateTime || event.start.date); 
+        const endTime = new Date(event.end.dateTime || event.end.date); 
+        const formattedStartTime = formatTime(startTime); 
+        const formattedEndTime = formatTime(endTime); 
+        eventTime.innerHTML = eventTitle.includes('❌') ? 
+            `<span class="strike" style="color: #DC143C;">${formattedStartTime} - ${formattedEndTime}</span>` : 
+            `<span style="color: #DC143C;">${formattedStartTime} - ${formattedEndTime}</span>`; 
 
-                    dayEvents.forEach(event => { 
+        // Check if the event title contains "X" (case-insensitive)
+        if (eventTitle.toLowerCase().includes('❌')) {
+            const apologyText = document.createElement('span');
+            apologyText.innerHTML = "&nbsp;&nbsp; معتذر &nbsp;&nbsp;";
+            apologyText.style.color = '#DC143C';
+            apologyText.style.marginLeft = '5px';
+            apologyText.style.backgroundColor = '#FFCCCC'; // Light red background
+            apologyText.style.padding = '2px 5px'; // Add padding for better appearance
+            apologyText.style.borderRadius = '5px'; // Optional: Rounded corners
+            eventTime.appendChild(apologyText); // Append the "معتذر" text
+        }
 
-                        const eventTime = document.createElement('div'); 
-
-                        eventTime.className = 'event-time'; 
-
-                        const startTime = new Date(event.start.dateTime || event.start.date); 
-
-                        const endTime = new Date(event.end.dateTime || event.end.date); 
-
-                        const formattedStartTime = formatTime(startTime); 
-
-                        const formattedEndTime = formatTime(endTime); 
-
-                        eventTime.innerHTML = eventTitle.includes('❌') ? 
-
-                            `<span class="strike" style="color: #DC143C;">${formattedStartTime} - ${formattedEndTime}</span>` : 
-
-                            `<span style="color: #DC143C;">${formattedStartTime} - ${formattedEndTime}</span>`; 
-                            const apologyText = document.createElement('span');
-                        apologyText.innerHTML = "&nbsp;&nbsp; معتذر &nbsp;&nbsp;";
-apologyText.style.color = '#DC143C';
-apologyText.style.marginLeft = '5px';
-apologyText.style.backgroundColor = '#FFCCCC'; // Light red background
-apologyText.style.padding = '2px 2px'; // Add padding for better appearance
-apologyText.style.borderRadius = '5px'; // Optional: Rounded corners
-eventTime.appendChild(apologyText);
-
-                        dayCell.appendChild(eventTime); 
-
-                    }); 
-
-                } else { 
-
-                    dayCell.textContent = '-'; 
-
-                } 
+        dayCell.appendChild(eventTime); 
+    }); 
+} else { 
+    dayCell.textContent = '-'; 
+}
 
                 row.appendChild(dayCell); 
 
